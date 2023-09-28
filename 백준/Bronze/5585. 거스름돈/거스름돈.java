@@ -11,6 +11,15 @@ public class Main {
         int change = 1000 - n;
         int count = 0;
 
+        int[] list = {500, 100, 50, 10, 5, 1};
+
+        for(int i = 0; i < 6; i++){
+            count += change / list[i];
+            change %= list[i];
+        }
+        System.out.println(count);
+        
+        /*
         while(change > 0){
             if(change / 500 > 0){
                 count += (change / 500);
@@ -32,6 +41,6 @@ public class Main {
                 break;
             }
         }
-        System.out.println(count);
+        */
     }
 }
