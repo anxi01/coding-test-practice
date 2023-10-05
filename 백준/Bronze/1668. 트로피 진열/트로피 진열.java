@@ -30,6 +30,14 @@ public class Main {
                 now = list.get(i);
             }
         }
+        /* 이런 식으로 변경하는게 좋음
+        for(int k : list){
+            if(now < k){
+                result += 1;
+                now = k;
+            }
+        }
+        */
         return result;
     }
 }
