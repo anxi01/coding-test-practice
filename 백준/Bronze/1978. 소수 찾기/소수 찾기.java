@@ -16,18 +16,20 @@ public class Main {
         for (int i = 0; i < n; i++) {
             int num = Integer.parseInt(st.nextToken());
 
-            int idx = 2;
-            while (num != 1 && idx <= num) {
-                if (idx == num) {
-                    count++;
-                }
-                if (num % idx == 0) {
-                    break;
-                }
-                idx++;
-            }
+            if(isPrime(num)) count++;
         }
 
         System.out.println(count);
+    }
+
+    public static boolean isPrime(int number) {
+        if(number == 1) return false;
+
+        for (int i = 2; i < number; i++) {
+
+            if(number % i == 0) return false;
+        }
+
+        return true;
     }
 }
