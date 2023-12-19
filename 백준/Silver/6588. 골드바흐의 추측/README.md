@@ -2,6 +2,9 @@
 
 [문제 링크](https://www.acmicpc.net/problem/6588) 
 
+### 중요!!!
+<strong> System.out.println을 사용해서 표현하는 게 더 빠르다. (System.out.printf 사용시 시간초과 뜸) </strong>
+
 ### 성능 요약
 
 메모리: 42588 KB, 시간: 1432 ms
