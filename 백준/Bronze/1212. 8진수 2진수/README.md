@@ -1,5 +1,12 @@
 # [Bronze II] 8진수 2진수 - 1212 
 
+### Tip
+8진수 -> 10진수
+int decimal = Integer.parseInt(8진수 String, 8); // 2진수에 적용하고 싶음 8 대신 2를 넣으면 된다.
+
+10진수 -> 2진수
+String binary = Integer.toBinaryString(decimal); // 2진수뿐만 아니라 8진수, 16진수로 변환하는 메서드 또한 존재한다.
+
 [문제 링크](https://www.acmicpc.net/problem/1212) 
 
 ### 성능 요약
