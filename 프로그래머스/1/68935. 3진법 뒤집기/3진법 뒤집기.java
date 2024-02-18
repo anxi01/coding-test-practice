@@ -7,13 +7,7 @@ class Solution {
       sb.append(n % 3);
       n /= 3;
     }
-    String str = sb.toString();
 
-    // 3진법 -> 10진법
-    int answer = 0;
-    for (int i = 0; i < str.length(); i++) {
-      answer += (int) Math.pow(3, str.length() - 1 - i) * Character.getNumericValue(str.charAt(i));
-    }
-    return answer;
+    return Integer.parseInt(sb.toString(), 3);
   }
 }
