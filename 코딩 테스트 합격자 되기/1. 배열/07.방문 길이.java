@@ -1,3 +1,38 @@
+import java.util.HashMap;
+import java.util.HashSet;
+
+// 중복 제거할 때 해시셋을 생각해보는게 좋다.
+
+class Solution {
+  public static int solution(String dirs) {
+    HashMap<Character, int[]> map = new HashMap<>();
+
+    map.put('U', new int[]{0, 1});
+    map.put('D', new int[]{0, -1});
+    map.put('L', new int[]{-1, 0});
+    map.put('R', new int[]{1, 0});
+
+    HashSet<String> set = new HashSet<>();
+    int x = 5, y = 5;
+    for (int i = 0; i < dirs.length(); i++) {
+      int[] offset = map.get(dirs.charAt(i));
+
+      int nx = x + offset[0];
+      int ny = y + offset[1];
+
+      if (nx < 0 || nx > 10 || ny < 0 || ny > 10) {
+        continue;
+      }
+
+      set.add(x + " " + y + " " + nx + " " + ny);
+      set.add(nx + " " + ny + " " + x + " " + y);
+
+      x = nx;
+      y = ny;
+    }
+    return set.size() / 2;
+  }
+}
 /*
 // 기존코드
 // 중복을 허용하지 않기 때문에 해시셋을 이용하여 중복 처리를 하려 하였다.
