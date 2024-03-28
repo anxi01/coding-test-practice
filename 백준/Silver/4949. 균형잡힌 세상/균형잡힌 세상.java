@@ -9,7 +9,7 @@ public class Main {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     String s;
-    while ((s = br.readLine()) != null && !s.equals(".")) {
+    while (!(s = br.readLine()).equals(".")) {
       System.out.println(isValidBalance(s));
     }
   }
