@@ -1,42 +1,36 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 class Solution {
   public static String[] solution(String[] record) {
 
-    final String ENTER = "Enter";
-    final String LEAVE = "Leave";
-    final String CHANGE = "Change";
+    HashMap<String, String> msg = new HashMap<>();
+    msg.put("Enter", "님이 들어왔습니다.");
+    msg.put("Leave", "님이 나갔습니다.");
 
-    final String ENTER_KOR = "님이 들어왔습니다.";
-    final String LEAVE_KOR = "님이 나갔습니다.";
+    HashMap<String, String> uid = new HashMap<>();
 
-    HashMap<String, String> map = new HashMap<>();
-
-    for (String r : record) {
-      String[] tmp = r.split(" ");
-      if (tmp[0].equals(ENTER) || tmp[0].equals(CHANGE)) {
-        map.put(tmp[1], tmp[2]);
+    // record의 각 줄을 하나씩 처리
+    for (String s : record) {
+      String[] cmd = s.split(" ");
+      if (cmd.length == 3) { // Enter || Change일 경우
+        uid.put(cmd[1], cmd[2]);
       }
     }
 
-    List<String> list = new ArrayList<>();
-    for (String r : record) {
-      String[] tmp = r.split(" ");
+    // 답을 저장할 answer list 생성
+    ArrayList<String> answer = new ArrayList<>();
 
-      switch (tmp[0]) {
-        case ENTER:
-          list.add(map.get(tmp[1]) + ENTER_KOR);
-          break;
-        case LEAVE:
-          list.add(map.get(tmp[1]) + LEAVE_KOR);
+    // record의 각 줄을 하나씩 처리
+    for (String s : record) {
+      String[] cmd = s.split(" ");
+      // 각 상태에 맞는 메시지를 answer에 저장
+      if (msg.containsKey(cmd[0])) {
+        answer.add(uid.get(cmd[1]) + msg.get(cmd[0]));
       }
     }
 
-    // List -> String[]으로 변경하는 방법
-    // toArray(new String[0]); || toArray(new String[list.size()]);
-    return list.toArray(new String[0]);
+    return answer.toArray(new String[0]);
   }
 }
