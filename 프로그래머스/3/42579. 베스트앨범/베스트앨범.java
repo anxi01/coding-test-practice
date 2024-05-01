@@ -2,47 +2,40 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
 class Solution {
   public static int[] solution(String[] genres, int[] plays) {
 
-    HashMap<String, Integer> totalMap = new HashMap<>();
+    HashMap<String, Integer> playMap = new HashMap<>();
+    HashMap<String, ArrayList<int[]>> genreMap = new HashMap<>();
 
-    for (int i = 0; i < genres.length; i++) {
-      totalMap.put(genres[i], totalMap.getOrDefault(genres[i], 0) + plays[i]);
-    }
-
-    HashMap<String, HashMap<Integer, Integer>> genreCountMap = new HashMap<>();
-
-    for (int i = 0; i < plays.length; i++) {
-      if (!genreCountMap.containsKey(genres[i])) {
-        HashMap<Integer, Integer> countMap = new HashMap<>();
-        countMap.put(i, plays[i]);
-        genreCountMap.put(genres[i], countMap);
-      } else {
-        genreCountMap.get(genres[i]).put(i, plays[i]);
+    // 장르별 총 재생 횟수와 각 곡의 재생 횟수 저장
+    for(int i = 0; i < genres.length; i++) {
+      String genre = genres[i];
+      int play = plays[i];
+      if (!genreMap.containsKey(genre)) {
+        genreMap.put(genre, new ArrayList<>());
+        playMap.put(genre, 0);
       }
+      genreMap.get(genre).add(new int[]{i, play});
+      playMap.put(genre, playMap.get(genre) + play);
     }
-
-    List<String> keySet = new ArrayList<>(totalMap.keySet());
-    // 값을 기준으로 내림차순 정렬
-    keySet.sort(((o1, o2) -> totalMap.get(o2) - totalMap.get(o1)));
 
     List<Integer> answer = new ArrayList<>();
-    for (String key : keySet) {
-      HashMap<Integer, Integer> countMap = genreCountMap.get(key);
-      List<Integer> genreKeys = new ArrayList<>(countMap.keySet());
 
-      // 값을 기준으로 내림차순 정렬
-      genreKeys.sort(((o1, o2) -> countMap.get(o2) - countMap.get(o1)));
+    // 총 재생 횟수가 많은 장르순으로 내림차순 정렬
+    Stream<Map.Entry<String, Integer>> sortedGenre = playMap.entrySet().stream().sorted(((o1, o2) ->
+        Integer.compare(o2.getValue(), o1.getValue())));
 
-      // 각 장르 별로 최대 2곡만 가능하다.
-      answer.add(genreKeys.get(0));
-      if (genreKeys.size() > 1) {
-        answer.add(genreKeys.get(1));
-      }
-    }
-
-    return answer.stream().mapToInt(s -> s).toArray();
+    // 각 장르 내에서 노래를 재생 횟수 순으로 정렬해 최대 2곡까지 선택
+    sortedGenre.forEach(entry -> {
+      Stream<int[]> sortedSongs = genreMap.get(entry.getKey()).stream()
+          .sorted(((o1, o2) -> Integer.compare(o2[1], o1[1])))
+          .limit(2);
+      sortedSongs.forEach(song -> answer.add(song[0]));
+    });
+    return answer.stream().mapToInt(Integer::intValue).toArray();
   }
 }
