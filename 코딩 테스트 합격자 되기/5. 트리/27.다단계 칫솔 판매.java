@@ -1,48 +1,39 @@
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 class Solution {
   public static int[] solution(String[] enroll, String[] referral, String[] seller, int[] amount) {
-    HashMap<String, String> relationMap = new HashMap<>();
 
+    // relation 해시맵. key는 enroll의 노드, value는 referral의 노드로 구성
+    Map<String, String> relation = new HashMap<>();
     for (int i = 0; i < enroll.length; i++) {
-      relationMap.put(enroll[i], referral[i]);
+      relation.put(enroll[i], referral[i]);
     }
 
-    HashMap<String, Integer> sellerAmountMap = new HashMap<>();
+    // total 총합 해시맵 생성
+    Map<String, Integer> total = new HashMap<>();
 
+    // seller 배열과 amount 배열을 이용하여 이익 분배
     for (int i = 0; i < seller.length; i++) {
-      sellerAmountMap.put(seller[i], amount[i]);
+      String currentName = seller[i];
+
+      // 판매자가 판매한 총 금액 계산
+      int money = amount[i] * 100;
+
+      // 판매자로부터 차례대로 상위 노드로 이동하며 이익 분배 (재귀)
+      while (money > 0 && !currentName.equals("-")) {
+        // 현재 판매자가 받을 금액 계산 (10%를 제외한 금액)
+        total.put(currentName, total.getOrDefault(currentName, 0) + money - (money / 10));
+        currentName = relation.get(currentName);
+        money /= 10;
+      }
     }
 
-    HashMap<String, Integer> resultMap = new HashMap<>();
-    for (String s : enroll) {
-      resultMap.put(s, 0);
-    }
-
-    for (String s : seller) {
-      int price = sellerAmountMap.get(s) * 100;
-      int remain = price / 10;
-      resultMap.put(s, resultMap.getOrDefault(s, 0) + price - remain);
-
-      recursion(relationMap, remain, resultMap, s);
-    }
-
-    int[] result = new int[enroll.length];
+    // enroll 배열의 모든 노드에 해당하는 이익을 배열로 반환
+    int[] answer = new int[enroll.length];
     for (int i = 0; i < enroll.length; i++) {
-      result[i] = resultMap.get(enroll[i]);
+      answer[i] = total.getOrDefault(enroll[i], 0);
     }
-    return result;
-  }
-
-  private static void recursion(HashMap<String, String> relationMap, int remain,
-      HashMap<String, Integer> resultMap, String seller) {
-    String tmpReferral = relationMap.get(seller);
-    if (tmpReferral.equals("-") || remain < 1) {
-      return;
-    }
-    int subRemain = remain / 10;
-    resultMap.put(tmpReferral, resultMap.getOrDefault(tmpReferral, 0) + remain - subRemain);
-    recursion(relationMap, subRemain, resultMap, tmpReferral);
+    return answer;
   }
 }
